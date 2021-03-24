@@ -12,9 +12,11 @@ export const Container = styled.SafeAreaView`
 
 export const InputArea = styled.View`
     padding: 40px;
+    width: 100%;
 `
 export const CustomButton = styled.TouchableOpacity`
     height: 60px;
+    width: 100%;
     background-color: azure;
     border-radius: 30px;
     justify-content: center;
