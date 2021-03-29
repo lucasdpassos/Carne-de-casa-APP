@@ -9,7 +9,7 @@ import {
     SignMessageBtnTextBold
 
  } from './styles'
-import { Text } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import BarberLogo from '../../assets/barber.svg'
 import SignInput from '../../components/SignInput'
 import EmailIcon from '../../assets/email.svg'
@@ -18,8 +18,20 @@ import LockIcon from '../../assets/lock.svg'
 
 export default () => {
 
+    const navigation = useNavigation()
+
     const [emailField, setEmailField] = useState('')
     const [passwordField, setPasswordField] = useState('')
+
+    const handleMessageButtonClick = () => {
+        navigation.reset({
+            routes: [{name: 'SignUp'}]
+        })
+    }
+
+    const handleSignClick = () => {
+
+    }
 
     return (
         <Container>
@@ -41,14 +53,14 @@ export default () => {
                 password={true}
                />
 
-                <CustomButton>
+                <CustomButton onPress={handleSignClick}>
                     <CustomButtonText>Login</CustomButtonText>
                 </CustomButton>
 
 
             </InputArea>
 
-            <SignMessageBtn>
+            <SignMessageBtn onPress={handleMessageButtonClick}>
                 <SignMessageBtnText>Ainda sem cadastro?</SignMessageBtnText>
                 <SignMessageBtnTextBold>Cadastrar</SignMessageBtnTextBold>
             </SignMessageBtn>
