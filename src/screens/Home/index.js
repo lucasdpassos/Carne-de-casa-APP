@@ -37,12 +37,12 @@ export default () => {
 
             let json = await Api.signIn(cpfcnpjField)  
             
-            if (json != false) {
+            if (json == true) {
                 navigation.reset({
-                    routes: [{name: 'Home'}]
+                    routes: [{name: 'SignUp'}]
                 })                
             } else {
-                alert('Login inválido')
+                
             }
             
 
@@ -53,34 +53,13 @@ export default () => {
 
     return (
         <Container>
-            <CarneLogo width="100%" height="320px" />
+           
 
-            <InputArea>
-
-               <SignInput IconSvg={EmailIcon}
-               
-                placeholder="CPF / CNPJ"
-                value={cpfcnpjField}
-                onChangeText={t=>setcpfcnpjField(t)}
-               />
-               <SignInput IconSvg={LockIcon}
-               
-                placeholder="Senha"
-                value={passwordField}
-                onChangeText={t=>setPasswordField(t)}
-                password={true}
-               />
-
-                <CustomButton onPress={handleSignClick}>
-                    <CustomButtonText>Login</CustomButtonText>
-                </CustomButton>
-
-
-            </InputArea>
+           
 
             <SignMessageBtn onPress={handleMessageButtonClick}>
-                <SignMessageBtnText>Ainda sem cadastro?</SignMessageBtnText>
-                <SignMessageBtnTextBold>Cadastrar</SignMessageBtnTextBold>
+                <SignMessageBtnText>HOMESCREEN i</SignMessageBtnText>
+              
             </SignMessageBtn>
 
         </Container>

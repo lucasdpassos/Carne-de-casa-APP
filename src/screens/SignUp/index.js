@@ -9,8 +9,11 @@ import {
     SignMessageBtnTextBold
 
  } from './styles'
+
+ import Api from '../../Api'
+
 import { useNavigation } from '@react-navigation/native'
-import BarberLogo from '../../assets/barber.svg'
+import CarneLogo from '../../assets/carnelogo.svg'
 import SignInput from '../../components/SignInput'
 import EmailIcon from '../../assets/email.svg'
 import LockIcon from '../../assets/lock.svg'
@@ -21,7 +24,7 @@ export default () => {
     const navigation = useNavigation()
 
     const [nameField, setNameField] = useState('')
-    const [emailField, setEmailField] = useState('')
+    const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
 
     const handleMessageButtonClick = () => {
@@ -30,27 +33,37 @@ export default () => {
         })
     }
 
-    const handleSignClick = () => {
-
+    const handleSignClick = async () => {
+        if(cpfcnpjField != '') {
+            let res = await Api.signUp(cpfcnpjField)
+            console.log(res)
+            if(res.token) {
+                alert('Worked')
+            } else {
+                alert('Erro: ' +res.error)
+            }
+        } else {
+            alert('Preencha todos os campos')
+        }
     }
 
     return (
         <Container>
-            <BarberLogo width="100%" height="160px" />
+            <CarneLogo width="100%" height="160px" />
 
             <InputArea>
 
                <SignInput IconSvg={EmailIcon}
-                password=''
+                
                 placeholder="Digite seu nome"
                 value={nameField}
                 onChangeText={t=>setNameField(t)}
                />
                <SignInput IconSvg={EmailIcon}
-                password=''
+           
                 placeholder="Digite seu email"
-                value={emailField}
-                onChangeText={t=>setEmailField(t)}
+                value={cpfcnpjField}
+                onChangeText={t=>setcpfcnpjField(t)}
                />
                <SignInput IconSvg={LockIcon}
                
