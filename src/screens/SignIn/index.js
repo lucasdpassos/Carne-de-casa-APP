@@ -17,6 +17,9 @@ import CarneLogo from '../../assets/carnelogo.svg'
 import SignInput from '../../components/SignInput'
 import EmailIcon from '../../assets/email.svg'
 import LockIcon from '../../assets/lock.svg'
+import axios from 'axios'
+
+
 
 
 export default () => {
@@ -26,30 +29,56 @@ export default () => {
     const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
 
+        
+
     const handleMessageButtonClick = () => {
         navigation.reset({
             routes: [{name: 'SignUp'}]
         })
     }
+    const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    const handleSignClick = async () => {
-        if(cpfcnpjField != '') {
+    async function loginRequest() {
 
-            let json = await Api.signIn(cpfcnpjField)  
+       
+        
+
+        (async () => {
+            const rawResponse = await axios(`https://api-carnedecasa.herokuapp.com/api/login`, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              data: JSON.stringify({cpfcnpj: cpfcnpjField})
+            }).then(function(response) {
+                console.log(response.data);
+                console.log(cpfcnpjField)
+                var userData = response.data
+                var isUser = userData[0].cpfcnpj
+               
+                console.log(isUser)
+                
+                if(isUser != null) {
+                    navigation.reset({
+                        routes: [{name: 'Home'}]
+                    })
+                }
+             
+            })
+                
+               
             
-            if (json != false) {
-                navigation.reset({
-                    routes: [{name: 'Home'}]
-                })                
-            } else {
-                alert('Login inválido')
-            }
-            
+          })();
+        
+    
 
-        } else {
-            alert('Preencha os campos')
-        }
-    }
+
+      
+ 
+    }          
+        
+ 
 
     return (
         <Container>
@@ -60,7 +89,7 @@ export default () => {
                <SignInput IconSvg={EmailIcon}
                
                 placeholder="CPF / CNPJ"
-                value={cpfcnpjField}
+                value={cpfcnpjField}                
                 onChangeText={t=>setcpfcnpjField(t)}
                />
                <SignInput IconSvg={LockIcon}
@@ -71,7 +100,7 @@ export default () => {
                 password={true}
                />
 
-                <CustomButton onPress={handleSignClick}>
+                <CustomButton onPress={loginRequest} >
                     <CustomButtonText>Login</CustomButtonText>
                 </CustomButton>
 
@@ -79,8 +108,8 @@ export default () => {
             </InputArea>
 
             <SignMessageBtn onPress={handleMessageButtonClick}>
-                <SignMessageBtnText>Ainda sem cadastro?</SignMessageBtnText>
-                <SignMessageBtnTextBold>Cadastrar</SignMessageBtnTextBold>
+                <SignMessageBtnText>Está sem acesso?</SignMessageBtnText>
+                <SignMessageBtnTextBold>Falar com o suporte</SignMessageBtnTextBold>
             </SignMessageBtn>
 
         </Container>

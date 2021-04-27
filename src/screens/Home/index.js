@@ -58,8 +58,7 @@ export default () => {
            
 
             <SignMessageBtn onPress={handleMessageButtonClick}>
-                <SignMessageBtnText>HOMESCREEN i</SignMessageBtnText>
-              
+                <SignMessageBtnText>Bem vindo, USER</SignMessageBtnText> 
             </SignMessageBtn>
 
         </Container>

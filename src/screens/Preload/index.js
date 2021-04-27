@@ -22,8 +22,7 @@ export default () => {
   }, []);
 
   return (
-    <Container>
-      <BarberLogo width="260px" height="160px" />
+    <Container>     
       <LoadingIcon size="large" color="#edeef7" />
     </Container>
   );
