@@ -5,6 +5,7 @@ import Preload from '../screens/Preload'
 import SignIn from '../screens/SignIn'
 import SignUp from '../screens/SignUp'
 import Home from '../screens/Home'
+import Store from '../screens/Store'
 
 const Stack = createStackNavigator()
 
@@ -19,5 +20,6 @@ export default () => (
         <Stack.Screen name="SignIn" component={SignIn} / >
         <Stack.Screen name="SignUp" component={SignUp} / >
         <Stack.Screen name="Home" component={Home} / >
+        <Stack.Screen name="Store" component={Store} / >
     </Stack.Navigator>
 )

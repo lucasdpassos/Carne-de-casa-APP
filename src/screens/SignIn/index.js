@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { 
     Container,
     InputArea,
@@ -18,18 +19,21 @@ import SignInput from '../../components/SignInput'
 import EmailIcon from '../../assets/email.svg'
 import LockIcon from '../../assets/lock.svg'
 import axios from 'axios'
+import 'localstorage-polyfill'
 
 
 
-
-export default () => {
-
+export default  () => {
+    
+    
     const navigation = useNavigation()
 
     const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
+    const [nameField, setNameField] = useState('')
 
-        
+    
+    
 
     const handleMessageButtonClick = () => {
         navigation.reset({
@@ -38,10 +42,7 @@ export default () => {
     }
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    async function loginRequest() {
-
-       
-        
+    async function loginRequest() {            
 
         (async () => {
             const rawResponse = await axios(`https://api-carnedecasa.herokuapp.com/api/login`, {
@@ -57,6 +58,13 @@ export default () => {
                 var userData = response.data
                 var isUser = userData[0].cpfcnpj
                
+                const userName = userData[0].nome
+
+                localStorage.setItem("userNameLocalStorage", userData[0].nome); 
+               
+                function getData() {
+                    setNameField(isUser)
+                }
                 console.log(isUser)
                 
                 if(isUser != null) {
@@ -78,7 +86,7 @@ export default () => {
  
     }          
         
- 
+   
 
     return (
         <Container>
@@ -114,4 +122,9 @@ export default () => {
 
         </Container>
     )
+
+    
+
 }
+
+

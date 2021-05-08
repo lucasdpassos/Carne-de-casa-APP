@@ -6,8 +6,7 @@ import styled from 'styled-components/native'
 export const Container = styled.SafeAreaView`
     background-color: #f6e65f;
     flex: 1;
-    justify-content: center;
-    align-items: center;
+    
 `
 
 export const InputArea = styled.View`
@@ -34,8 +33,8 @@ export const SignMessageBtn = styled.TouchableOpacity`
     margin-bottom: 20px;
 `
 export const SignMessageBtnText = styled.Text`
-    font-size: 16px;
-    color: #1F2232
+    font-size: 30px;
+    color: #C93F3C;
 `
 export const SignMessageBtnTextBold = styled.Text`
     font-size: 16px;
@@ -44,3 +43,81 @@ export const SignMessageBtnTextBold = styled.Text`
     margin-left: 5px;
 `
 
+export const MenuContainer = styled.View`
+    width: 400px;
+    height: 300px;  
+    
+  
+`
+
+export const BuyButton = styled.TouchableOpacity`    
+    
+    elevation: 8;
+    background-color: #C93F3C;
+    
+    border-radius: 10;
+    max-width: 250px;
+    height: 70px;
+    justify-content: center;
+    align-items: center;
+    left: 17%;
+`
+
+export const BuyButtonTxt = styled.Text`
+
+    font-size: 14px;
+    color: #FFFFFF;;
+   
+
+   
+
+`
+
+export const MenuButton = styled.TouchableOpacity`
+    elevation: 8;
+    background-color: #C93F3C;
+    border-radius: 10;
+    width: 120px;
+    height: 100px;    
+    align-items: center;
+    justify-content: center;
+
+`
+
+export const MenuButtonTxt = styled.Text`
+
+    font-size: 13px;
+    color: #FFFFFF;
+   
+`
+
+export const MenuHolder = styled.View`
+    width: 270px;
+    height: 450px;    
+    margin: 0 auto;    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: space-between;
+    
+    
+
+`
+   
+export const LogoHolder = styled.View`
+    width: 300px;
+    height: 100px;    
+    left: 11%;
+
+`
+   
+export const TriMenu = styled.TouchableOpacity`  
+   
+    width: 40px;
+    height: 30px;    
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top:10%;
+`
