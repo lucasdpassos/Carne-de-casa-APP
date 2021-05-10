@@ -55,7 +55,7 @@ export const BuyButton = styled.TouchableOpacity`
     elevation: 8;
     background-color: #C93F3C;
     
-    border-radius: 10;
+    border-radius: 10px;
     max-width: 250px;
     height: 70px;
     justify-content: center;
@@ -76,7 +76,7 @@ export const BuyButtonTxt = styled.Text`
 export const MenuButton = styled.TouchableOpacity`
     elevation: 8;
     background-color: #C93F3C;
-    border-radius: 10;
+    border-radius: 10px;
     width: 120px;
     height: 100px;    
     align-items: center;

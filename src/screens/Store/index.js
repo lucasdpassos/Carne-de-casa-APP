@@ -29,7 +29,8 @@ import {
     BuyCardFRANGONOBRE,
     BuyKitFRANGONOBRE,
     BuyCardFRANGOMODERADO,
-    BuyKitFRANGOMODERADO
+    BuyKitFRANGOMODERADO,
+    BackToCar
   
 
  } from './styles'
@@ -37,6 +38,7 @@ import {
 import Api from '../../Api'
 
 import { useNavigation } from '@react-navigation/native'
+import RNPickerSelect from "react-native-picker-select";
 import CarneLogo from '../../assets/carnelogo.svg'
 import SignInput from '../../components/SignInput'
 import EmailIcon from '../../assets/email.svg'
@@ -47,7 +49,8 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { ScrollView, Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import 'localstorage-polyfill'
-
+import WaitingBox from './Waiting'
+import Waiting from './Waiting'
 
 
 export default () => {
@@ -56,6 +59,28 @@ export default () => {
 
     var nameField = vOneLS; 
 
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+      setShow(Platform.OS === 'ios');
+      setDate(currentDate);
+    };
+  
+    const showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+    };
+  
+    const showTimepicker = () => {
+      showMode('time');
+    };
 
     const marketIcon = <Icon name="shopping-bag" size={20} color="white" />;
     const tagsIcon = <Icon name="tags" size={15} color="white" />;
@@ -77,41 +102,72 @@ export default () => {
     const [passwordField, setPasswordField] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
     const [carVisible, setCarVisible] = useState(false);
+    const [scheduleVisible, setScheduleVisible] = useState(false);
+    const [deliveryVisible, setDeliveryVisible] = useState(false);
+    const [paymentVisible, setPaymentVisible] = useState(false);
     const [marketCarIcon, setMarketCarIcon] = useState('');
-    let [kitName, setKitName] = useState('')
-    let [kitPrice, setKitPrice] = useState('')
-    let [theArray, setTheArray] = useState([]);
+    const [kitName, setKitName] = useState('')
+    const [kitPrice, setKitPrice] = useState('')
+    var [theArray, setTheArray] = useState([]);
+    var theArrayString = theArray.join('                        -  ');
+    let [isLoading, setIsLoading] = useState(false)
+    let [scheduleDate, setScheduleDate] = useState('')
+    var [kitPriceArray, setKitPriceArray] = useState([0])
+    var [dateMode, setDateMode] = useState('')
+    var [deliveryMode, setDeliveryMode] = useState('')
+    var [paymentMode, setPaymentMode] = useState('')
+    var [resumeVisible, setResumeVisible] = useState(false)
 
-    const Carrinho = {
+    var firstDate = new Date().getDate() + 3;
+    var secondDate = new Date().getDate() + 4;
+    var thirdDate = new Date().getDate() + 5;
+    var month = new Date().getMonth();
+    var finalFirstDate = `${firstDate}/${month}`
+    var finalSecondDate = `${secondDate}/${month}`
+    var finalThirdDate = `${thirdDate}/${month}`
+
+    const Item = {
       nome: kitName,
       id: 1,
       price: kitPrice
     }
+
+    const array1 = [1, 2, 3, 4];
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;    
 
     const backMenuClick = () => {
         navigation.reset({
             routes: [{name: 'Home'}]
         })
     }
+   
+    var sum = kitPriceArray.reduce((a, n) => (a + Number(n)), 0);
 
-    
-    const handleSignClick = async () => {
-        if(cpfcnpjField != '') {
+    const finishBuy = () => {
+      if(sum < 2000) {
+        alert('O pedido mínimo é de R$2.000')
+      }else {
+        setScheduleVisible(!scheduleVisible)
+      }
+    }
 
-            let json = await Api.signIn(cpfcnpjField)  
-            
-            if (json == true) {
+    const updateCart = () => {   
+      setIsLoading(true)  
+      setTimeout(() => {
+        setTheArray([...theArray, [Item.nome,  Item.price]]);       
+        setKitPriceArray([...kitPriceArray, [Item.price]])        
+        setIsLoading(false)    
+        
+      }, 3000);
+  }
+       const handleFinalClick = async () => {
+                  
+        
                 navigation.reset({
-                    routes: [{name: 'SignUp'}]
-                })                
-            } else {
-                
-            }
-            
-
-        } else {
-            alert('Preencha os campos')
-        }
+                    routes: [{name: 'Done'}]
+                })               
+         
+        
     }
 
     return (
@@ -127,10 +183,11 @@ export default () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Enviar para o carrinho o Kit {kitName} no valor de R$191,41?</Text>
+            <Text style={styles.modalText}>Enviar para o carrinho o Kit {kitName} no valor de {kitPrice}</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => {setModalVisible(!modalVisible);updateCart()}}
+              
             >
               <Text style={styles.textStyle}>Confirmar</Text>
             </Pressable>
@@ -153,40 +210,203 @@ export default () => {
         }}
       >
         <View style={styles.centeredView}>
+       
           <View style={styles.modalView}>
+          <BackToCar onPress={() => setCarVisible(!carVisible)}>{arrowLeftIcon}</BackToCar>
             <Text style={styles.modalText}>Carrinho de {nameField}: </Text>
             <View style={styles.finalView}>
-            <Text style={styles.finalViewText}>{Carrinho.nome} - {Carrinho.price}</Text>
+            <Text style={styles.finalViewText}>{theArrayString}</Text>
             </View>
-            <Text style={styles.modalText}>{Carrinho.price}</Text> {/* DESCOBRIR COMO CALCULAR O TOTAL */}
+            <Text style={styles.modalText}>TOTAL: R${sum}</Text> 
 
             <Pressable
               style={[styles.buttonFinal, styles.buttonClose]}
-              onPress={() => setCarVisible(!carVisible)}
+              onPress={() => setScheduleVisible(!scheduleVisible)}
             >               
-              <Text style={styles.textStyle}>Finalizar Compras</Text>
+              <Text style={styles.textStyle}>Ir para o agendamento</Text>
             </Pressable>
+           
           </View>
         </View>
-      </Modal>
+      </Modal>  
+   
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={scheduleVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!scheduleVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          <BackToCar onPress={() => setScheduleVisible(!Visible)}>{arrowLeftIcon}</BackToCar>
+            <Text style={styles.modalText}>Escolha uma das datas disponíveis:</Text>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setDateMode(finalFirstDate);setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>{firstDate}/{month}</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setDateMode(finalSecondDate);setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>{secondDate}/{month}</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setDateMode(finalThirdDate);setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>{thirdDate}/{month}</Text>
+            </Pressable>         
+            
+
+          
+           
+          </View>
+        </View>
+      </Modal>  
+   
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={deliveryVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!deliveryVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          <BackToCar onPress={() => setDeliveryVisible(!deliveryVisible)}>{arrowLeftIcon}</BackToCar>
+            <Text style={styles.modalText}>Estamos quase lá! Você prefere Frete ou Retirar o pedido pessoalmente?</Text>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setDeliveryMode('Retirar');setPaymentVisible(!paymentVisible)}}
+            >               
+              <Text style={styles.textStyle}>Retirar o Pedido</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setDeliveryMode('Frete');setKitPriceArray([...kitPriceArray, 15]);setPaymentVisible(!paymentVisible)}}
+            >               
+              <Text style={styles.textStyle}>Frete (+ R$15,00)</Text>
+            </Pressable>
+                 
+            
+
+          
+           
+          </View>
+        </View>
+      </Modal>  
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={paymentVisible}
+        onRequestClose={() => {
+         
+          setModalVisible(!paymentVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          <BackToCar onPress={() => setPaymentVisible(!paymentVisible)}>{arrowLeftIcon}</BackToCar>
+            <Text style={styles.modalText}>Qual será o meio de pagamento? (Será feito na entrega do pedido)</Text>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setPaymentMode('Boleto');setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Boleto</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setPaymentMode('TED/PIX');setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>TED / PIX</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setPaymentMode('Cartão de Crédito');setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Cartão de Crédito</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {setPaymentMode('Cartão de Débito');setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Cartão de Débito</Text>
+            </Pressable>
+                 
+            
+
+          
+           
+          </View>
+        </View>
+      </Modal>  
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={resumeVisible}
+        onRequestClose={() => {
+         
+          setModalVisible(!resumeVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          <BackToCar onPress={() => setResumeVisible(!resumeVisible)}>{arrowLeftIcon}</BackToCar>
+            <Text style={styles.modalText}>Resumo do seu pedido:</Text>                        
+            <Text style={styles.modalText}>Total: {sum}</Text>                        
+            <Text style={styles.modalText}>Data de entrega: {dateMode}</Text>                        
+            <Text style={styles.modalText}>Frete ou Retirada: {deliveryMode}</Text>                        
+            <Text style={styles.modalText}>Método de pagamento: {paymentMode}</Text>                        
+            
+
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => handleFinalClick()}
+            >               
+              <Text style={styles.textStyle}>Ok, finalizar pedido</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => setResumeVisible(!resumeVisible)}
+            >               
+              <Text style={styles.textStyle}>Cancelar e voltar</Text>
+            </Pressable>
+           
+          </View>
+        </View>
+      </Modal>  
+    
+   
+             
            <StoreNavBar>
             <TriMenu onPress={() => setCarVisible(!carVisible)} value={marketCarIcon}>{carIcon}</TriMenu>
             <BackMenu onPress={backMenuClick} value={marketCarIcon}>{arrowLeftIcon}</BackMenu>
             </StoreNavBar>
            <ScrollView>
-            <MenuContainer>
+            <MenuContainer>           
                 <BuyCardEUEELA source={require('../../assets/EUEELA.png')} />
-                <BuyKitEUEELA onPress={() => { setKitName('EU E ELA');setKitPrice('R$999');setModalVisible(!modalVisible);}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitEUEELA>
+                <BuyKitEUEELA onPress={() => { setKitName('EU E ELA');setKitPrice(90.23);setModalVisible(!modalVisible);}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitEUEELA>
                 <BuyCardMEUEU source={require('../../assets/MEUEU.png')} />
-                <BuyKitMEUEU onPress={() => { setKitName('MEU EU');setModalVisible(!modalVisible)}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitMEUEU>
+                <BuyKitMEUEU  onPress={() => { setKitName('MEU EU');setKitPrice(195.37);setModalVisible(!modalVisible);}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitMEUEU>
                 <BuyCardQUINZENAL source={require('../../assets/QUINZENAL.png')} />
-                <BuyKitQUINZENAL  onPress={() => { setKitName('KIT QUINZENAL');setModalVisible(!modalVisible)}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitQUINZENAL>
+                <BuyKitQUINZENAL  onPress={() => { setKitName('KIT QUINZENAL');setKitPrice(191.41);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitQUINZENAL>
                 <BuyCardFRANGAO source={require('../../assets/FRANGAO.png')} />
-                <BuyKitFRANGAO onPress={() => { setKitName('FRANGÃO');setModalVisible(!modalVisible)}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitFRANGAO>
+                <BuyKitFRANGAO onPress={() => { setKitName('FRANGÃO');setKitPrice(140.30);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGAO>
                 <BuyCardFRANGONOBRE source={require('../../assets/FRANGONOBRE.png')} />
-                <BuyKitFRANGONOBRE onPress={() => { setKitName('FRANGO NOBRE');setModalVisible(!modalVisible)}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitFRANGONOBRE>
+                <BuyKitFRANGONOBRE onPress={() => { setKitName('FRANGO NOBRE');setKitPrice(129.58);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGONOBRE>
                 <BuyCardFRANGOMODERADO source={require('../../assets/FRANGOMODERADO.png')} />
-                <BuyKitFRANGOMODERADO onPress={() => { setKitName('FRANGO MODERADO');setModalVisible(!modalVisible)}}><BuyButtonTxt>Comprar</BuyButtonTxt></BuyKitFRANGOMODERADO>
+                <BuyKitFRANGOMODERADO onPress={() => { setKitName('FRANGO MODERADO');setKitPrice(2151.34);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGOMODERADO>
             </MenuContainer>                 
             </ScrollView>
           
@@ -205,7 +425,7 @@ const styles = StyleSheet.create({
       margin: 20,
       backgroundColor: "white",
       borderRadius: 20,
-      padding: 145,
+      padding: 185,
       alignItems: "center",
       shadowColor: "#000",
       shadowOffset: {

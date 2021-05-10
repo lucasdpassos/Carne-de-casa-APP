@@ -54,7 +54,7 @@ export const BuyButton = styled.TouchableOpacity`
     
     elevation: 8;
     background-color: #C93F3C;    
-    border-radius: 10;
+    border-radius: 10px;
     max-width: 250px;
     height: 70px;
     justify-content: center;
@@ -75,7 +75,7 @@ export const BuyButtonTxt = styled.Text`
 export const MenuButton = styled.TouchableOpacity`
     elevation: 8;
     background-color: #C93F3C;
-    border-radius: 10;
+    border-radius: 10px;
     width: 120px;
     height: 100px;    
     align-items: center;
@@ -138,6 +138,13 @@ export const BackMenu = styled.TouchableOpacity`
     left: 4%;
     z-index: 1;
 `
+export const BackToCar = styled.TouchableOpacity`  
+   
+    width: 40px;
+    height: 30px;      
+
+   
+`
 
 export const BuyCardEUEELA = styled.Image`
     width: 390px;
@@ -151,7 +158,7 @@ export const BuyCardEUEELA = styled.Image`
 export const BuyKitEUEELA = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
@@ -177,7 +184,7 @@ export const BuyCardMEUEU = styled.Image`
 export const BuyKitMEUEU = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
@@ -202,7 +209,7 @@ export const BuyCardQUINZENAL = styled.Image`
 export const BuyKitQUINZENAL = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
@@ -227,7 +234,7 @@ export const BuyCardFRANGAO = styled.Image`
 export const BuyKitFRANGAO = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
@@ -252,7 +259,7 @@ export const BuyCardFRANGONOBRE = styled.Image`
 export const BuyKitFRANGONOBRE = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
@@ -277,7 +284,7 @@ export const BuyCardFRANGOMODERADO = styled.Image`
 export const BuyKitFRANGOMODERADO = styled.TouchableOpacity`
     elevation: 8;
     background-color: black;    
-    border-radius: 10;
+    border-radius: 10px;
     width: 100px;
     height: 40px;
     justify-content: center;
