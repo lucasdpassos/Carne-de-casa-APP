@@ -46,6 +46,7 @@ export const SignMessageBtnTextBold = styled.Text`
 export const MenuContainer = styled.View`
     width: 400px;
     height: 300px;  
+    justify-content: space-between;
     
   
 `
@@ -61,6 +62,9 @@ export const BuyButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     left: 17%;
+    padding: 15px;
+    display: flex;
+    
 `
 
 export const BuyButtonTxt = styled.Text`

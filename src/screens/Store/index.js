@@ -30,7 +30,8 @@ import {
     BuyKitFRANGONOBRE,
     BuyCardFRANGOMODERADO,
     BuyKitFRANGOMODERADO,
-    BackToCar
+    BackToCar,
+    
   
 
  } from './styles'
