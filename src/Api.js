@@ -65,6 +65,18 @@ export default {
         })
         const json = await req.json()
         return json
+    },
+    sendRequest: async () => {
+        const req = await fetch(`${BASE_API}/newsell`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({cpfcpnj})
+        })
+        const json = await req.json()
+        return json
     }
 }
 

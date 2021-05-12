@@ -32,7 +32,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Appbar } from 'react-native-paper';
 import { ScrollView, Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
-
+import axios from 'axios'
 
 export default () => {
 
@@ -48,12 +48,20 @@ export default () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     var vOneLS = localStorage.getItem("userNameLocalStorage");  
+    var vTwoLS = localStorage.getItem("isUserIdLocalStorage");  
 
     var nameField = vOneLS; 
+    var cliente_id = vTwoLS; 
     const navigation = useNavigation()
 
     const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
+
+    const [complainField, setComplainField] = useState('')
+    const [complainMsg, setComplainMsg] = useState('Meu aplicativo não funciona')
+    const [complainModalVisible, setComplainModalVisible] = useState(false)
+    
+    const complainDate = Date()
 
     const handleMessageButtonClick = () => {
         navigation.reset({
@@ -98,6 +106,31 @@ export default () => {
         }
     }
 
+    const updateComplain = () => {  
+        setTimeout(() => {
+        sendSupport()
+        
+      }, 5000);
+  }
+    var today = new Date()
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const complain = {
+      id_cliente: cliente_id,
+      tipo_chamado: complainField,
+      mensagem_ch: complainMsg,
+      data_ch: date,
+      nome: nameField,
+    }
+
+    async function sendSupport() {          
+        await axios.post(`https://api-carnedecasa.herokuapp.com/api/newsupport`, complain)
+        .then(res => {
+          console.log(res);
+          console.log(res.data);          
+        })
+     
+      }
+
     return (
         <Container>
            
@@ -115,45 +148,75 @@ export default () => {
             <Text style={styles.modalText}>Qual problema deseja relatar?</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {setComplainField('Não consigo fazer meu pedido');setComplainModalVisible(!complainModalVisible)}}
               
             >
               <Text style={styles.textStyle}>Não consigo fazer meu pedido</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {setComplainField('Não consigo registrar meu cliente');setComplainModalVisible(!complainModalVisible)}}
               
             >
               <Text style={styles.textStyle}>Não consigo registrar meu cliente</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible);sendSupport()}}
               
             >
               <Text style={styles.textStyle}>Não consigo registrar venda</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible);sendSupport()}}
               
             >
               <Text style={styles.textStyle}>Não consigo ver meu estoque</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible);sendSupport()}}
               
             >
               <Text style={styles.textStyle}>Fiz um pedido e não tive retorno</Text>
             </Pressable>
             <Pressable
               style={[styles.buttonCancel, styles.buttonClose]}
-              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible)}}
+              onPress={() => {setModalVisible(!modalVisible)}}
             >
               <Text style={styles.textStyle}>Cancelar</Text>
             </Pressable>
+          </View>
+        </View>
+      </Modal>
+               <Modal
+        animationType="slide"
+        transparent={true}
+        visible={complainModalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setComplainModalVisible(!complainModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Tem certeza que deseja abrir seu chamado?</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {alert('Reclamação efetuada, em breve um colaborador do suporte técnico entrará em contato');setModalVisible(!modalVisible);setComplainModalVisible(!complainModalVisible);updateComplain()}}
+              
+            >
+              <Text style={styles.textStyle}>Sim</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {setModalVisible(!modalVisible);setComplainModalVisible(!complainModalVisible);updateComplain()}}
+              
+            >
+              <Text style={styles.textStyle}>Cancelar</Text>
+            </Pressable>
+           
           </View>
         </View>
       </Modal>

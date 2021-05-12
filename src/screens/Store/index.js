@@ -52,7 +52,7 @@ import { ScrollView, Alert, Modal, StyleSheet, Text, Pressable, View } from 'rea
 import 'localstorage-polyfill'
 import WaitingBox from './Waiting'
 import Waiting from './Waiting'
-
+import axios from 'axios'
 
 export default () => {
 
@@ -133,6 +133,7 @@ export default () => {
       price: kitPrice
     }
 
+    
     const array1 = [1, 2, 3, 4];
     const reducer = (accumulator, currentValue) => accumulator + currentValue;    
 
@@ -170,6 +171,25 @@ export default () => {
          
         
     }
+
+    const request = {
+      descricao: theArrayString,
+      valor_pedido: sum,
+      id_pedido: 1,
+      frete: deliveryMode,
+      tipo_pg: paymentMode,
+      data_entrega: dateMode,
+      nome_cliente: nameField      
+    }
+
+    async function sendRequest() {          
+        await axios.post(`https://api-carnedecasa.herokuapp.com/api/newsell`, request)
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+     
+      }
 
     return (
         <Container>
@@ -222,7 +242,7 @@ export default () => {
 
             <Pressable
               style={[styles.buttonFinal, styles.buttonClose]}
-              onPress={() => setScheduleVisible(!scheduleVisible)}
+              onPress={() => finishBuy()}
             >               
               <Text style={styles.textStyle}>Ir para o agendamento</Text>
             </Pressable>
@@ -373,7 +393,7 @@ export default () => {
 
             <Pressable
               style={[styles.buttonFinal, styles.buttonClose]}
-              onPress={() => handleFinalClick()}
+              onPress={() => {sendRequest();handleFinalClick()}}
             >               
               <Text style={styles.textStyle}>Ok, finalizar pedido</Text>
             </Pressable>

@@ -31,6 +31,7 @@ export default  () => {
     const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
     const [nameField, setNameField] = useState('')
+    const [userId, setUserId] = useState('')
 
     
     
@@ -59,11 +60,14 @@ export default  () => {
                 var isUser = userData[0].cpfcnpj
                
                 const userName = userData[0].nome
+                const isUserId = userData[0].id_cliente
 
                 localStorage.setItem("userNameLocalStorage", userData[0].nome); 
+                localStorage.setItem("isUserIdLocalStorage", userData[0].id_cliente); 
                
                 function getData() {
                     setNameField(isUser)
+                    setUserId(isUserId)
                 }
                 console.log(isUser)
                 
