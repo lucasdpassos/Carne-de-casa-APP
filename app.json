@@ -1,9 +1,9 @@
 {
-  "name": "devsBarber",
-  "displayName": "devsBarber",
+  "name": "Carne de Casa",
+  "displayName": "Carne de Casa",
   "expo": {
-    "name": "devsBarber",
-    "slug": "devsBarber",
+    "name": "Carne de Casa",
+    "slug": "Carne de Casa",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
