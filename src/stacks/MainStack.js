@@ -5,7 +5,7 @@ import Preload from '../screens/Preload'
 import SignIn from '../screens/SignIn'
 import SignUp from '../screens/SignUp'
 import Home from '../screens/Home'
-import Store from '../screens/Store'
+import Store from '../screens/Store/Index'
 import Done from '../screens/Store/Done'
 import Client from '../screens/Client'
 import Sell from '../screens/Sell'
@@ -20,7 +20,7 @@ export default () => (
     }}
     >
         <Stack.Screen name="Preload" component={Preload} / >
-        <Stack.Screen name="SignIn" component={SignIn} / >
+        <Stack.Screen name="SignIn" component={Store} / >
         <Stack.Screen name="SignUp" component={SignUp} / >
         <Stack.Screen name="Home" component={Home} / >
         <Stack.Screen name="Store" component={Store} / >

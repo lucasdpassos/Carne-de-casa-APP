@@ -53,8 +53,6 @@ import 'localstorage-polyfill'
 import WaitingBox from './Waiting'
 import Waiting from './Waiting'
 import axios from 'axios'
-import ProductCard from './ProductCard'
-import MyProducts from './Flatlist'
 
 export default () => {
 
@@ -418,7 +416,18 @@ export default () => {
             </StoreNavBar>
            <ScrollView>
             <MenuContainer>           
-            <MyProducts />
+                <BuyCardEUEELA source={require('../../assets/EUEELA.png')} />
+                <BuyKitEUEELA onPress={() => { setKitName('EU E ELA');setKitPrice(90.23);setModalVisible(!modalVisible);}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitEUEELA>
+                <BuyCardMEUEU source={require('../../assets/MEUEU.png')} />
+                <BuyKitMEUEU  onPress={() => { setKitName('MEU EU');setKitPrice(195.37);setModalVisible(!modalVisible);}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitMEUEU>
+                <BuyCardQUINZENAL source={require('../../assets/QUINZENAL.png')} />
+                <BuyKitQUINZENAL  onPress={() => { setKitName('KIT QUINZENAL');setKitPrice(191.41);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitQUINZENAL>
+                <BuyCardFRANGAO source={require('../../assets/FRANGAO.png')} />
+                <BuyKitFRANGAO onPress={() => { setKitName('FRANGÃO');setKitPrice(140.30);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGAO>
+                <BuyCardFRANGONOBRE source={require('../../assets/FRANGONOBRE.png')} />
+                <BuyKitFRANGONOBRE onPress={() => { setKitName('FRANGO NOBRE');setKitPrice(129.58);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGONOBRE>
+                <BuyCardFRANGOMODERADO source={require('../../assets/FRANGOMODERADO.png')} />
+                <BuyKitFRANGOMODERADO onPress={() => { setKitName('FRANGO MODERADO');setKitPrice(2151.34);setModalVisible(!modalVisible)}}><BuyButtonTxt>{isLoading ? <WaitingBox /> : 'Comprar'}</BuyButtonTxt></BuyKitFRANGOMODERADO>
             </MenuContainer>                 
             </ScrollView>
           
