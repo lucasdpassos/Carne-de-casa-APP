@@ -54,7 +54,8 @@ import WaitingBox from './Waiting'
 import Waiting from './Waiting'
 import axios from 'axios'
 import ProductCard from './ProductCard'
-import MyProducts from './Flatlist'
+import ListItem from './Flatlist'
+
 
 export default () => {
 
@@ -418,7 +419,7 @@ export default () => {
             </StoreNavBar>
            <ScrollView>
             <MenuContainer>           
-            <MyProducts />
+            <ListItem />           
             </MenuContainer>                 
             </ScrollView>
           

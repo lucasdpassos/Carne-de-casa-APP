@@ -1,124 +1,84 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Barber from '../../assets/barber.svg'
-import CarneLogo from '../../assets/carnelogo.svg'
-import axios from 'axios'
-import { RESULTS } from 'react-native-permissions';
+import React from 'react';
+import { View, Text, FlatList, Button, SafeAreaView, processColor, ImageBackground, TouchableOpacity } from 'react-native';
 
 
+const padraobg = require('../../assets/carnepadrao.jpeg')
 
+const products = [
+  { _id: 1, name: 'Kit Dia-a-Dia', price: 50, quantity: 0, bg: padraobg },
+  { _id: 2, name: 'Item 2', price: 29, quantity: 0, bg: padraobg },
+  { _id: 3, name: 'Item 3', price: 200, quantity: 0, bg: padraobg },
+];
 
-export default function MyProducts() {
+class ListItem extends React.Component {
+  render() {
+    const { item } = this.props;
 
-const quinzenalImg = require('../../assets/QUINZENAL.png')
-
-  const [people, setPeople] = useState([
-    { name: 'DIA A DIA', id: '1', img: quinzenalImg },
-    { name: 'CHURRASCO', id: '2', img: 'babaca' },
-    { name: 'MINI-CHURRASCO', id: '3', img: 'babaca' },
-    { name: 'luigi', id: '4', img: 'babaca' },
-    { name: 'peach', id: '5', img: 'babaca' },
-    { name: 'toad', id: '6', img: 'babaca' },
-    { name: 'bowser', id: '7', img: 'babaca' },
-  ]);
-  
-  componentDidMount = async () => {
-
-   
-    const headers = {
-        'Authorization': 'Bearer' + token
-    }
-
-   var laranja = await axios.get("http://localhost:3333/api/getproducts", {
-        headers: headers
-    }).then(function (response) {
-        
-        const dados = response.data;
-        const nome = dados.nome
-        const id = dados.id
-        const preco = dados.preco
-        var products = {
-            nome: nome,
-            id: id,
-            preco: preco
-        }
-        return products
-    }).catch(error => {
-        console.log(error)
-    })
-
+    return (
+      <View style={{ flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'tomato', borderRadius: 100, width: 155, height: 155 }}>
+        <View style={{borderRadius: 100}}>
+        <ImageBackground style={{width: 80, height: 80}} imageStyle={{ borderRadius: 106, flex: -1}} source={item.bg}></ImageBackground>
+        </View>
+        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+       
+          <Text  style={{ color: 'azure' }}>{item.name} - </Text>          
+          <Text  style={{ color: 'azure' }}>R${item.price}</Text>
+          
+        </View>
+        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity title="-"  onPress={this.props.onSubtract} style={{width: 24, height: 30, backgroundColor: '#246EB9', }} ><Text style={{ textAlign: 'center', color: 'azure', fontSize: 22  }}>-</Text></TouchableOpacity>
+          <Text style={{ backgroundColor: 'azure', fontSize: 20, width: 20, textAlign: 'center' }}>{item.quantity}</Text>
+          <TouchableOpacity title="+" onPress={this.props.onAdd}  style={{width: 24, height: 30, backgroundColor: '#246EB9', }} ><Text style={{ textAlign: 'center', color: 'azure', fontSize: 22  }}>+</Text></TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
 }
 
-  return (
-    <View style={styles.container}>
+class App extends React.Component {
+  state = {
+    products,
+  };
 
-      <FlatList 
-        numColumns={2}
-        keyExtractor={(item) => item.id} 
-        data={people} 
-        renderItem={({ item }) => (             
-            <View style={styles.item}>
-           <Image style={styles.image} source={item.img} /><Text style={styles.productTitle}>{item.name}</Text><TouchableOpacity style={styles.shopper} onPress={() => alert('eita')}><Text style={styles.shopperText}>+</Text></TouchableOpacity>
-            </View>
-             
-        )}
-      />
-
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    backgroundColor: '#f6e65f',
-  },
-  item: {
-    flex: 1,
-    marginHorizontal: 10,
-    marginTop: 24,
-    padding: 0,
-    backgroundColor: 'tomato',
-    fontSize: 24,
-    borderRadius: 180,
-    flex: 1,
-     display: 'flex',     
-     alignItems: 'center',
-     flexDirection: 'column'
-    
-  },
-  image: {
-      width: 100,
-      height: 100,
-      borderRadius: 100
-
-  },
-  productTitle: {     
-     fontSize: 12,
-     fontWeight: 'bold',
-     color: 'azure',
-     marginTop: 10
-  },
-  shopper: {
-      fontSize: 10,
-      borderRadius: 180,
-      backgroundColor: 'tomato',
-      padding: 1,
-      maxHeight: 50,     
-      marginTop: 20,
-      display: 'flex',
-      justifyContent: 'center'
-
-      
-
-  },
-  shopperText: {
-      color: 'azure',
-      fontSize: 40,
-      
+  onSubtract = (item, index) => {
+    const products = [...this.state.products];
+    products[index].quantity -= 1;
+    this.setState({ products });
   }
 
-});
+  onAdd = (item, index) => {
+    const products = [...this.state.products];
+    products[index].quantity += 1;
+    this.setState({ products });
+  }
+
+  render() {
+    const { products } = this.state;
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    products.forEach((item) => {
+      totalQuantity += item.quantity;
+      totalPrice += item.quantity * item.price;
+    })
+
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <FlatList
+          data={this.state.products}
+          renderItem={({ item, index }) => (
+            <ListItem
+              item={item}
+              onSubtract={() => this.onSubtract(item, index)}
+              onAdd={() => this.onAdd(item, index)}
+            />
+          )}
+          keyExtractor={item => item._id}
+        />
+        <Text>Total Quantity: {totalQuantity}</Text>
+        <Text>Total Price: {totalPrice}</Text>
+      </SafeAreaView>
+    );
+  }
+}
+
+export default App;
