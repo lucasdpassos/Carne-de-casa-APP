@@ -45,7 +45,10 @@ export const SignMessageBtnTextBold = styled.Text`
 
 export const MenuContainer = styled.View`
     width: 400px;
-    height: 4000px;  
+    height: 2000px;  
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
     
   
 `
