@@ -155,7 +155,7 @@ export default () => {
         setScheduleVisible(!scheduleVisible)
       }
     }
-
+    
     const updateCart = () => {   
       setIsLoading(true)  
       setTimeout(() => {
@@ -414,10 +414,14 @@ export default () => {
    
              
            <StoreNavBar>
-            <TriMenu onPress={() => setCarVisible(!carVisible)} value={marketCarIcon}>{carIcon}</TriMenu>
+            <TriMenu onPress={() => {
+              this.scrollView.scrollToEnd({ animated: true }); 
+               
+            }}><Text>Finalizar Compra</Text></TriMenu>
             <BackMenu onPress={backMenuClick} value={marketCarIcon}>{arrowLeftIcon}</BackMenu>
             </StoreNavBar>
-           <ScrollView>
+           <ScrollView  ref={(view) => {
+    this.scrollView = view }} >
             <MenuContainer>           
             <ListItem />           
             </MenuContainer>                 
@@ -432,7 +436,8 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 22
+      marginTop: 22,
+     
     },
     modalView: {
       margin: 20,
