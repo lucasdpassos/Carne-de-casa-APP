@@ -34,6 +34,9 @@ export default  () => {
 
     const [cpfcnpjField, setcpfcnpjField] = useState('')
     const [passwordField, setPasswordField] = useState('')
+    const [dateField, setDateField] = useState('')
+    const [kitField, setKitField] = useState('')
+    const [valueField, setValueField] = useState('')
     const [nameField, setNameField] = useState('')
     const arrowLeftIcon = <Icon name="arrow-left" size={35} color="#C93F3C" />;
 
@@ -47,6 +50,12 @@ export default  () => {
     const handleMessageButtonClick = () => {
         navigation.reset({
             routes: [{name: 'SignUp'}]
+        })
+    }
+    const handleRegister = () => {
+        alert('Registro efetuado com sucesso!')
+        navigation.reset({
+            routes: [{name: 'Home'}]
         })
     }
     const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -112,28 +121,28 @@ export default  () => {
                <SignInput IconSvg={LockIcon}
                
                 placeholder="Kit(s) Vendido(s)"
-                value={passwordField}
-                onChangeText={t=>setPasswordField(t)}
+                value={kitField}
+                onChangeText={t=>setKitField(t)}
                
                />
                <SignInput IconSvg={LockIcon}
                
                 placeholder="Valor total da Venda"
-                value={passwordField}
-                onChangeText={t=>setPasswordField(t)}
+                value={valueField}
+                onChangeText={t=>setValueField(t)}
                
                />
                <SignInput IconSvg={LockIcon}
                
                 placeholder="Data da venda"
-                value={passwordField}
-                onChangeText={t=>setPasswordField(t)}
+                value={dateField}
+                onChangeText={t=>setDateField(t)}
            
                />
               
               
 
-                <CustomButton onPress={loginRequest} >
+                <CustomButton onPress={handleRegister} >
                     <CustomButtonText>Registrar</CustomButtonText>
                 </CustomButton>
 

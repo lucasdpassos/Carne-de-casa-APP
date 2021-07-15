@@ -70,7 +70,7 @@ export default () => {
     }
     const handleStoreClick = () => {
         navigation.reset({
-            routes: [{name: 'Loja'}]
+            routes: [{name: 'Store'}]
         })
     }
     const handleClientClick = () => {

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, Button, SafeAreaView, processColor, ImageBackground, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, FlatList, Button, SafeAreaView, processColor, ImageBackground, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import 'localstorage-polyfill'
 import axios from 'axios'
-
+import { useNavigation } from '@react-navigation/native'
 const padraobg = require('../../assets/carnelogo.png')
 
+var vOneLS = localStorage.getItem("userNameLocalStorage");  
+const userName = vOneLS
 
 
 const products = [
@@ -24,6 +26,7 @@ const products = [
 const pArray = []
 
 const baby = []
+
 
 
 class ListItem extends React.Component {
@@ -70,9 +73,38 @@ class App extends React.Component {
   state = {
     products,
     pArray,
-    baby
+    baby,
+    data: '',
+    frete: '',
+    pagamento: '',
+    
+    modalVisible: false,
+    deliveryVisible: false,
+    paymentVisible: false,
+    resumeVisible: false
   };
 
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+  setDeliveryVisible = (visible) => {
+    this.setState({ deliveryVisible: visible });
+  }
+  setPaymentVisible = (visible) => {
+    this.setState({ paymentVisible: visible });
+  }
+  setResumeVisible = (visible) => {
+    this.setState({ resumeVisible: visible });
+  }
+  setData = (value) => {
+    this.setState({ data: value });
+  }
+  setFrete = (value) => {
+    this.setState({ frete: value });
+  }
+  setPagamento = (value) => {
+    this.setState({ pagamento: value });
+  }
   
   onSubtract = (item, index) => {
     const products = [...this.state.products];
@@ -108,6 +140,9 @@ class App extends React.Component {
     localStorage.setItem("userBabyStorage", baby); 
     
   }
+  OnModal = () => {
+    this.setState({modalVisible: true})
+  }
  
 
   render() {
@@ -116,7 +151,14 @@ class App extends React.Component {
     let totalPrice = 0;
     let totalbaby = [];
     let babyArray = localStorage.getItem("userBabyStorage"); 
-  
+    const modalVisible = this.state.modalVisible
+    const deliveryVisible = this.state.deliveryVisible
+    const paymentVisible = this.state.paymentVisible
+    const resumeVisible = this.state.resumeVisible
+    const data = this.state.data
+    const frete = this.state.frete
+    const pagamento = this.state.pagamento
+    
 
     products.forEach((item) => {
       totalQuantity += item.quantity;
@@ -125,11 +167,14 @@ class App extends React.Component {
       totalPrice += item.quantity * item.price;
       
     })
-
+    
     let finalBuy = {
       quantidade: totalQuantity,
       valor: totalPrice,
-      produtos: babyArray
+      produtos: babyArray,
+      data: data,
+      frete: frete,
+      pagamento: pagamento
     }
     async function storeData() {          
      await axios(`https://morada-pdf-api.herokuapp.com/api/newasset`, {
@@ -144,10 +189,197 @@ class App extends React.Component {
       })
    
     }
+    function terminarCompra() {
+      alert('Seu pedido foi recebido com sucesso, você receberá mais detalhes do seu pedido em breve por email/whatsapp/sms')
+      const navigation = useNavigation();      
+      navigation.reset({
+        routes: [{name: 'Done'}]
+     })
+    }
+    
     
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
+
+
+
+
+
+<Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          
+        }}
+      >
+        <View style={{backgroundColor:'azure', width:400, height:800}}>
+          <View style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:105}} >
+            <Text style={{fontSize:20}}>ENTREGA</Text>
+            <Text>Escolha uma das datas disponíveis</Text>
+           
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setData('18/07'); this.setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>18/07</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setData('19/07'); this.setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>19/07</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setData('20/07'); this.setDeliveryVisible(!deliveryVisible)}}
+            >               
+              <Text style={styles.textStyle}>20/07</Text>
+            </Pressable>         
+            
+          </View>
+        </View>
+      </Modal>
+
+
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={deliveryVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!deliveryVisible);
+        }}
+      >
+        <View>
+       
+          <View style={{backgroundColor:'azure', width:400, height:800, display:'flex', justifyContent:'center', alignItems:'center'}}>   
+          <View style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:75, width:300}}>    
+            <Text style={{fontSize:18}}>Caso você retire o pedido na loja, não precisará pagar o valor do frete, o que você prefere?</Text>
+            
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setFrete('Retirada'); this.setPaymentVisible(!paymentVisible)}}
+            >               
+              <Text style={styles.textStyle}>Retirar o Pedido</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setFrete('Frete'); this.setPaymentVisible(!paymentVisible)}}
+            >               
+              <Text style={styles.textStyle}>Frete (+ R$25,00)</Text>
+            </Pressable>
+                 
+            
+
+          
+            </View> 
+          </View>
+        </View>
+      </Modal>  
+
+
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={paymentVisible}
+        onRequestClose={() => {
+         
+          setModalVisible(!paymentVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          
+            <Text style={styles.modalText}>Qual será o meio de pagamento? (Será feito na entrega do pedido)</Text>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setPagamento('Boleto'); this.setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Boleto</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setPagamento('TED / PIX'); this.setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>TED / PIX</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setPagamento('Cartão de Crédito'); this.setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Cartão de Crédito</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {this.setPagamento('Débito'); this.setResumeVisible(!resumeVisible)}}
+            >               
+              <Text style={styles.textStyle}>Cartão de Débito</Text>
+            </Pressable>
+                 
+            
+
+          
+           
+          </View>
+        </View>
+      </Modal>  
+
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={resumeVisible}
+        onRequestClose={() => {
+         
+          setModalVisible(!resumeVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+       
+          <View style={styles.modalView}>
+          
+            <Text style={styles.modalText}>Resumo do seu pedido:</Text>                        
+            <Text style={styles.modalText}>Total: R${totalPrice}</Text>                        
+            <Text style={styles.modalText}>Data de entrega: {data}</Text>                        
+            <Text style={styles.modalText}>Frete ou Retirada: {frete}</Text>                        
+            <Text style={styles.modalText}>Método de pagamento: {pagamento}</Text>                        
+            
+
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => {storeData(); this.setResumeVisible(!resumeVisible);this.setPaymentVisible(!paymentVisible);this.setDeliveryVisible(!deliveryVisible);this.setModalVisible(!modalVisible)}}
+            >               
+              <Text style={styles.textStyle}>Ok, finalizar pedido</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonFinal, styles.buttonClose]}
+              onPress={() => setResumeVisible(!resumeVisible)}
+            >               
+              <Text style={styles.textStyle}>Cancelar e voltar</Text>
+            </Pressable>
+           
+          </View>
+        </View>
+      </Modal>  
+
+
+
+
+
+
+
+
+
+
+
         <FlatList
           data={this.state.products}
           renderItem={({ item, index }) => (
@@ -160,12 +392,95 @@ class App extends React.Component {
           )}
           keyExtractor={item => item._id}
         />
-        <Text>Quantidade de Produtos: {totalQuantity}</Text>
-        <Text>Preço Total: R${totalPrice}</Text>        
-        <TouchableOpacity onPress={() => storeData()}><Text>caralho</Text></TouchableOpacity>
+        <View style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <Text style={{fontSize:22}}>Carrinho</Text>
+        </View>
+        <View style={{display:'flex', backgroundColor:'azure', justifyContent:'center', alignItems:'center'}}>
+        <Text style={{fontSize:20}}>Quantidade de Produtos: {totalQuantity}</Text>
+        <Text style={{fontSize:20}}>Preço da Compra: R${totalPrice}</Text>    
+        <Text style={{fontSize:16}}>Frete: R$25</Text>    
+        <Text style={{fontSize:22}}>Preço Final: R${totalPrice + 25}</Text>    
+        </View> 
+        <View style={{display:'flex', justifyContent:'center', alignItems:'center' }}>   
+        <TouchableOpacity style={{backgroundColor:'azure', borderWidth: 1, borderColor:'grey', width:200, height:50, display:'flex', justifyContent:'center', alignItems:'center'}} onPress={() => this.setModalVisible(!modalVisible)}><Text>Finalizar Compra</Text></TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
-  }
-}
+  }}
+  const styles = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+     
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 185,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    button: {
+      borderRadius: 20,
+      padding: 20,
+      elevation: 2,
+      width: 300
+    },
+    buttonCancel: {
+      borderRadius: 20,
+      padding: 20,
+      elevation: 2,
+      top: 15,
+      width: 300
+    },
+    buttonFinal: {
+      borderRadius: 20,
+      padding: 20,
+      elevation: 2,
+      marginTop: 15,
+      width: 300
+    },
+    buttonOpen: {
+      backgroundColor: "black",
+    },
+    buttonClose: {
+      backgroundColor: "black",
+    },
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center",
+      fontSize: 16,
+      width: 100
+    },
+    finalViewText: {
+      marginBottom: 15,
+      
+      fontSize: 16,
+      width: 100
+    },
+    finalView: {
+        width: 300,
+        height: 300,
+        backgroundColor: '#f0f0f5',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    }
+  })
 
 export default App;

@@ -422,17 +422,17 @@ export default () => {
    
              
            <StoreNavBar>
-            <TriMenu onPress={() => {
+            <TriMenu style={{backgroundColor:'tomato', borderWidth:1, width:100, position:'absolute', left:150, display:'flex', justifyContent:'center', alignItems:'center'}} onPress={() => {
               this.scrollView.scrollToEnd({ animated: true }); 
                
-            }}><Text></Text></TriMenu>
+            }}><Text style={{color:'azure'}}>Ver Carrinho</Text></TriMenu>
             <BackMenu onPress={backMenuClick} value={marketCarIcon}>{arrowLeftIcon}</BackMenu>
+            
             </StoreNavBar>
            <ScrollView  ref={(view) => {
     this.scrollView = view }} >
             <MenuContainer>           
-            <ListItem />
-            <View><TouchableOpacity onPress={finishBuy}><Text>Finalizar Compra</Text></TouchableOpacity></View>           
+            <ListItem />                       
             </MenuContainer> 
                           
             </ScrollView>
