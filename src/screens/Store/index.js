@@ -55,11 +55,15 @@ import Waiting from './Waiting'
 import axios from 'axios'
 import ProductCard from './ProductCard'
 import ListItem from './Flatlist'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default () => {
 
+    var babyArray = localStorage.getItem("userBabyStorage")
+
     var vOneLS = localStorage.getItem("userNameLocalStorage");  
+    var finalBuy = localStorage.getItem("userBuyStorage");  
 
     var nameField = vOneLS; 
 
@@ -98,7 +102,10 @@ export default () => {
     const arrowLeftIcon = <Icon name="arrow-left" size={35} color="#C93F3C" />;
 
     var vOneLS = localStorage.getItem("userNameLocalStorage");  
-
+    var finalBuy = localStorage.getItem("userBuyStorage"); 
+    var babyArray = localStorage.getItem("userBabyStorage")
+    var array123 = babyArray
+    var finalCar = finalBuy
     var nameField = vOneLS; 
     const navigation = useNavigation()
 
@@ -149,7 +156,8 @@ export default () => {
     var sum = kitPriceArray.reduce((a, n) => (a + Number(n)), 0);
 
     const finishBuy = () => {
-      if(sum < 2000) {
+      console.log(finalBuy)
+      if(finalCar.totalPrice < 2000) {
         alert('O pedido mínimo é de R$2.000')
       }else {
         setScheduleVisible(!scheduleVisible)
@@ -417,14 +425,16 @@ export default () => {
             <TriMenu onPress={() => {
               this.scrollView.scrollToEnd({ animated: true }); 
                
-            }}><Text>Finalizar Compra</Text></TriMenu>
+            }}><Text></Text></TriMenu>
             <BackMenu onPress={backMenuClick} value={marketCarIcon}>{arrowLeftIcon}</BackMenu>
             </StoreNavBar>
            <ScrollView  ref={(view) => {
     this.scrollView = view }} >
             <MenuContainer>           
-            <ListItem />           
-            </MenuContainer>                 
+            <ListItem />
+            <View><TouchableOpacity onPress={finishBuy}><Text>Finalizar Compra</Text></TouchableOpacity></View>           
+            </MenuContainer> 
+                          
             </ScrollView>
           
           

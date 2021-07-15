@@ -70,7 +70,7 @@ export default () => {
     }
     const handleStoreClick = () => {
         navigation.reset({
-            routes: [{name: 'Store'}]
+            routes: [{name: 'Loja'}]
         })
     }
     const handleClientClick = () => {
@@ -237,18 +237,14 @@ export default () => {
           
            
             
-            <BuyButton onPress={handleClientClick}>
-            <BuyButtonTxt >CADASTRO DE CLIENTE {tagsIcon}</BuyButtonTxt>
-            </BuyButton>  
+          
             <BuyButton onPress={handleSellClick}>
-            <BuyButtonTxt>REGISTRAR VENDAS {reportIcon}</BuyButtonTxt>
+            <BuyButtonTxt>REGISTRAR VENDA </BuyButtonTxt>
             </BuyButton>  
             <BuyButton onPress={handleStockClick}>
-            <BuyButtonTxt>ESTOQUE LOCAL {reportIcon}</BuyButtonTxt>
+            <BuyButtonTxt>MEU ESTOQUE</BuyButtonTxt>
             </BuyButton>  
-            <BuyButton onPress={handleStockClick}>
-            <BuyButtonTxt>MÍDIA {reportIcon}</BuyButtonTxt>
-            </BuyButton>  
+            
 
             <BuyButton onPress={() => setModalVisible(!modalVisible)}>
             <BuyButtonTxt>SUPORTE {helpIcon}</BuyButtonTxt>

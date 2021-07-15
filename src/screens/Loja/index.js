@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, Button, SafeAreaView, processColor, ImageBackground, TouchableOpacity, Modal } from 'react-native';
 import 'localstorage-polyfill'
-import axios from 'axios'
+
 
 const padraobg = require('../../assets/carnelogo.png')
-
 
 
 const products = [
@@ -106,45 +105,23 @@ class App extends React.Component {
     this.setState(baby)    
     console.log(baby)
     localStorage.setItem("userBabyStorage", baby); 
-    
   }
- 
+
 
   render() {
     const { products } = this.state;
     let totalQuantity = 0;
     let totalPrice = 0;
     let totalbaby = [];
-    let babyArray = localStorage.getItem("userBabyStorage"); 
-  
+    let babyArray = localStorage.getItem("userBabyStorage");  
+   
 
     products.forEach((item) => {
       totalQuantity += item.quantity;
       totalbaby = this.state.baby;
       babyArray = localStorage.getItem("userBabyStorage")
       totalPrice += item.quantity * item.price;
-      
     })
-
-    let finalBuy = {
-      quantidade: totalQuantity,
-      valor: totalPrice,
-      produtos: babyArray
-    }
-    async function storeData() {          
-     await axios(`https://morada-pdf-api.herokuapp.com/api/newasset`, {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              data: finalBuy})
-      .then(res => {        
-        console.log(res.data);          
-      })
-   
-    }
-    
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -162,7 +139,7 @@ class App extends React.Component {
         />
         <Text>Quantidade de Produtos: {totalQuantity}</Text>
         <Text>Preço Total: R${totalPrice}</Text>        
-        <TouchableOpacity onPress={() => storeData()}><Text>caralho</Text></TouchableOpacity>
+        <TouchableOpacity style={{marginLeft: 70, padding: 35, backgroundColor:'tomato', width:250 }}><Text style={{fontSize:22}}>Finalizar Compra</Text></TouchableOpacity>
       </SafeAreaView>
     );
   }

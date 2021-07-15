@@ -38,7 +38,7 @@ export default  () => {
 
     const handleMessageButtonClick = () => {
         navigation.reset({
-            routes: [{name: 'SignUp'}]
+            routes: [{name: 'Home'}]
         })
     }
     const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -112,7 +112,7 @@ export default  () => {
                 password={true}
                />
 
-                <CustomButton onPress={loginRequest} >
+                <CustomButton onPress={handleMessageButtonClick} >
                     <CustomButtonText>Login</CustomButtonText>
                 </CustomButton>
 
